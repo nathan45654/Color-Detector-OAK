@@ -128,14 +128,15 @@ class CameraApp(App):
                     purple_upper = np.array([130,255,255])
                     purple_full_mask = cv2.inRange(frame, purple_lower, purple_upper)
                     frame = cv2.bitwise_and(frame, frame, mask=purple_full_mask)
-                    
+                    frame = cv2.cvtColor(frame,cv2.COLOR_HSV2BGR)                    
                     
                     
                                      
                     
-                    img = self.image_decoder.decode(
-                        getattr(frame, view_name).image_data
-                    )
+                    # img = self.image_decoder.decode(
+                    #     getattr(frame, view_name).image_data
+                    # )
+                    img = frame
                     texture = Texture.create(
                         size=(img.shape[1], img.shape[0]), icolorfmt="bgr"
                     )
