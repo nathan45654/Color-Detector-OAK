@@ -122,21 +122,35 @@ class CameraApp(App):
                 # Skip if view_name was not included in frame
                 try:
                     # Decode the image and render it in the correct kivy texture
+                    # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+                    
+                    # purple_lower = np.array([110,10,20])
+                    # purple_upper = np.array([130,255,255])
+                    # purple_full_mask = cv2.inRange(frame, purple_lower, purple_upper)
+                    # frame = cv2.bitwise_and(frame, frame, mask=purple_full_mask)
+                    # frame = cv2.cvtColor(frame,cv2.COLOR_HSV2BGR)                    
+                    # img = frame
+                    
+                                     
+                    
+                    img = self.image_decoder.decode(
+                        getattr(frame, view_name).image_data
+                    )
+                    ########
+                    
+                    
+                    frame = img
                     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
                     
                     purple_lower = np.array([110,10,20])
                     purple_upper = np.array([130,255,255])
                     purple_full_mask = cv2.inRange(frame, purple_lower, purple_upper)
                     frame = cv2.bitwise_and(frame, frame, mask=purple_full_mask)
-                    frame = cv2.cvtColor(frame,cv2.COLOR_HSV2BGR)                    
-                    
-                    
-                                     
-                    
-                    # img = self.image_decoder.decode(
-                    #     getattr(frame, view_name).image_data
-                    # )
+                    frame = cv2.cvtColor(frame,cv2.COLOR_HSV2BGR) 
                     img = frame
+                    
+                    
+                    ########
                     texture = Texture.create(
                         size=(img.shape[1], img.shape[0]), icolorfmt="bgr"
                     )
