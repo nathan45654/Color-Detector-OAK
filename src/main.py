@@ -17,6 +17,8 @@ import os
 from typing import List
 
 import grpc
+import cv2
+import numpy as np
 from farm_ng.oak import oak_pb2
 from farm_ng.oak.camera_client import OakCameraClient
 from farm_ng.service import service_pb2
@@ -120,6 +122,17 @@ class CameraApp(App):
                 # Skip if view_name was not included in frame
                 try:
                     # Decode the image and render it in the correct kivy texture
+                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+                    
+                    purple_lower = np.array([110,10,20])
+                    purple_upper = np.array([130,255,255])
+                    purple_full_mask = cv2.inRange(frame, purple_lower, purple_upper)
+                    frame = cv2.bitwise_and(frame, frame, mask=purple_full_mask)
+                    
+                    
+                    
+                                     
+                    
                     img = self.image_decoder.decode(
                         getattr(frame, view_name).image_data
                     )
