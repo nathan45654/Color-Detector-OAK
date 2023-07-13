@@ -39,7 +39,7 @@ from turbojpeg import TurboJPEG
 from gantry import GantryControlState
 from gantry import GantryTpdo1
 from gantry import make_gantry_rpdo1_proto
-from gantry import parse_gantry_tpdo1_proto
+# from gantry import parse_gantry_tpdo1_proto
 
 import cv2
 import numpy as np
@@ -264,7 +264,7 @@ class CameraColorApp(App):
                     img = self.image_decoder.decode(
                         getattr(frame, view_name).image_data
                     )
-                    # # #
+                    #//////////////////////////////////////////
                     img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
                     gray_img = img.copy()
                     bool_img = img.copy()
@@ -292,7 +292,7 @@ class CameraColorApp(App):
                     img = gray_img.copy()
                     
                     
-                    # # # # # #
+                    #///////////////////////////////////////////////////
                     texture = Texture.create(
                         size=(img.shape[1], img.shape[0]), icolorfmt="bgr"
                     )
