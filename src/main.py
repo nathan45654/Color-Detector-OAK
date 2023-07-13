@@ -345,13 +345,13 @@ class CameraColorApp(App):
 
             await asyncio.sleep(0.1)
 
-### this is where you will determine whether or not to move the gantry based on the purple color sent.
+#// this is where you will determine whether or not to move the gantry based on the purple color sent.
     async def pose_generator(self, period: float = 0.02):
         """The pose generator yields an AmigaRpdo1 (auto control command) for the canbus client to send on the bus
         at the specified period (recommended 50hz) based on the onscreen joystick position."""
         while self.root is None:
             await asyncio.sleep(0.01)
-        ### put the x and y coordinate and feed stuff right here
+        #// put the x and y coordinate and feed stuff right here
         while True:
             msg: canbus_pb2.RawCanbusMessage = make_gantry_rpdo1_proto(
                 state_req=GantryControlState.STATE_AUTO_ACTIVE,
