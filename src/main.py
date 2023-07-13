@@ -176,8 +176,7 @@ class CameraColorApp(App):
                 response_stream = None
                 continue
 
-            for proto in response.messages.messages:
-                pass
+            # for proto in response.messages.messages:
                 # Check if message is for the dashboard
                 # amiga_tpdo1: Optional[AmigaTpdo1] = parse_amiga_tpdo1_proto(proto)
                 # if amiga_tpdo1:
