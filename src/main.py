@@ -14,6 +14,8 @@
 
 # To do:
 # figure out why stream_canbus doesn't work. 
+    # maybe comment out all of your canbus messages and try to use the amiga ones
+    # definitely something to do with the client.stream()
 
 
 import argparse
@@ -169,7 +171,8 @@ class CameraColorApp(App):
                 and state.value != service_pb2.ServiceState.UNAVAILABLE
             ):
                 # get the streaming object
-                response_stream = client.stream()
+                # response_stream = client.stream()
+                pass
 
             # try:
             #     # try/except so app doesn't crash on killed service
