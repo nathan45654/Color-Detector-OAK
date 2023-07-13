@@ -256,7 +256,7 @@ class CameraColorApp(App):
                     frame = img
                     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-                    purple_lower = np.array([110,10,20])
+                    purple_lower = np.array([120,40,50])
                     purple_upper = np.array([130,255,255])
                     purple_full_mask = cv2.inRange(frame, purple_lower, purple_upper)
                     frame = cv2.bitwise_and(frame, frame, mask=purple_full_mask)
