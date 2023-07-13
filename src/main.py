@@ -109,10 +109,10 @@ class CameraColorApp(App):
         camera_client: OakCameraClient = OakCameraClient(camera_config)
 
         # configure the canbus client
-        # canbus_config: ClientConfig = ClientConfig(
-        #     address=self.address, port=self.canbus_port
-        # )
-        # canbus_client: CanbusClient = CanbusClient(canbus_config)
+        canbus_config: ClientConfig = ClientConfig(
+            address=self.address, port=self.canbus_port
+        )
+        canbus_client: CanbusClient = CanbusClient(canbus_config)
 
         # Camera task(s)
         self.tasks.append(
@@ -120,12 +120,12 @@ class CameraColorApp(App):
         )
 
         # Canbus task(s)
-        # self.tasks.append(
-        #     asyncio.ensure_future(self.stream_canbus(canbus_client))
-        # )
-        # self.tasks.append(
-        #     asyncio.ensure_future(self.send_can_msgs(canbus_client))
-        # )
+        self.tasks.append(
+            asyncio.ensure_future(self.stream_canbus(canbus_client))
+        )
+        self.tasks.append(
+            asyncio.ensure_future(self.send_can_msgs(canbus_client))
+        )
 
 
         return await asyncio.gather(run_wrapper(), *self.tasks)
@@ -250,6 +250,9 @@ class CameraColorApp(App):
                 # Skip if view_name was not included in frame
                 try:
                     # Decode the image and render it in the correct kivy texture
+                    
+                    #//////////////////////////////////////////
+
                     img = self.image_decoder.decode(
                         getattr(frame, view_name).image_data
                     )
@@ -262,43 +265,9 @@ class CameraColorApp(App):
                     frame = cv2.bitwise_and(frame, frame, mask=purple_full_mask)
                     frame = cv2.cvtColor(frame,cv2.COLOR_HSV2BGR) 
                     img = frame
-                                     
-                    
-                    
-                    #//////////////////////////////////////////
-                    # img = self.image_decoder.decode(
-                    #     getattr(frame, view_name).image_data
-                    # )
-                    
-                    # img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-                    # gray_img = img
-                    # bool_img = img
-                    
-                    # purple_lower = np.array([120,50,20])
-                    # purple_upper = np.array([135,255,255])
-                    
-                    # for x_index,x in enumerate(gray_img):
-                    #     for y_index,y in enumerate(gray_img[x_index]):
-                    #         # for value in purple[x_index][y_index]:
-                    #         if y[0] > purple_lower[0] and y[0] < purple_upper[0]:
-                    #             if y[1] > purple_lower[1] and y[1] < purple_upper[1]:
-                    #                 if y[2] > purple_lower[2] and y[2] < purple_upper[2]:
-                    #                     pass
-                    #                 else:
-                    #                     gray_img[x_index][y_index][1] = 0
-                    #             else:
-                    #                 gray_img[x_index][y_index][1] = 0
-                    #         else:
-                    #             gray_img[x_index][y_index][1] = 0
-                    
-                    # bool_img = cv2.inRange(bool_img, purple_lower, purple_upper)
-                    # bool_img = cv2.bitwise_and(frame, frame, mask=bool_img)
-                    
-                    # gray_img = cv2.cvtColor(gray_img,cv2.COLOR_HSV2BGR) 
-                    # img = bool_img
-                    
                     
                     #///////////////////////////////////////////////////
+                    
                     texture = Texture.create(
                         size=(img.shape[1], img.shape[0]), icolorfmt="bgr"
                     )
