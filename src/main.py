@@ -164,22 +164,22 @@ class CameraColorApp(App):
                 await asyncio.sleep(0.1)
                 continue
 
-            if (
-                response_stream is None
-                and state.value != service_pb2.ServiceState.UNAVAILABLE
-            ):
-                # get the streaming object
-                response_stream = client.stream()
+            # if (
+            #     response_stream is None
+            #     and state.value != service_pb2.ServiceState.UNAVAILABLE
+            # ):
+            #     # get the streaming object
+            #     response_stream = client.stream()
 
-            try:
-                # try/except so app doesn't crash on killed service
-                response: canbus_pb2.StreamCanbusReply = await response_stream.read()
-                assert response and response != grpc.aio.EOF, "End of stream"
-            except Exception as e:
-                print(e)
-                response_stream.cancel()
-                response_stream = None
-                continue
+            # try:
+            #     # try/except so app doesn't crash on killed service
+            #     response: canbus_pb2.StreamCanbusReply = await response_stream.read()
+            #     assert response and response != grpc.aio.EOF, "End of stream"
+            # except Exception as e:
+            #     print(e)
+            #     response_stream.cancel()
+            #     response_stream = None
+            #     continue
 
             # for proto in response.messages.messages:
                 # Check if message is for the dashboard
