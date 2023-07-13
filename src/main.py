@@ -266,30 +266,31 @@ class CameraColorApp(App):
                     )
                     #//////////////////////////////////////////
                     img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-                    gray_img = img.copy()
-                    bool_img = img.copy()
+                    gray_img = img
+                    bool_img = img
                     
                     purple_lower = np.array([120,50,20])
                     purple_upper = np.array([135,255,255])
                     
-                    for x_index,x in enumerate(gray_img):
-                        for y_index,y in enumerate(gray_img[x_index]):
-                            # for value in purple[x_index][y_index]:
-                            if y[0] > purple_lower[0] and y[0] < purple_upper[0]:
-                                if y[1] > purple_lower[1] and y[1] < purple_upper[1]:
-                                    if y[2] > purple_lower[2] and y[2] < purple_upper[2]:
-                                        pass
-                                    else:
-                                        gray_img[x_index][y_index][1] = 0
-                                else:
-                                    gray_img[x_index][y_index][1] = 0
-                            else:
-                                gray_img[x_index][y_index][1] = 0
+                    # for x_index,x in enumerate(gray_img):
+                    #     for y_index,y in enumerate(gray_img[x_index]):
+                    #         # for value in purple[x_index][y_index]:
+                    #         if y[0] > purple_lower[0] and y[0] < purple_upper[0]:
+                    #             if y[1] > purple_lower[1] and y[1] < purple_upper[1]:
+                    #                 if y[2] > purple_lower[2] and y[2] < purple_upper[2]:
+                    #                     pass
+                    #                 else:
+                    #                     gray_img[x_index][y_index][1] = 0
+                    #             else:
+                    #                 gray_img[x_index][y_index][1] = 0
+                    #         else:
+                    #             gray_img[x_index][y_index][1] = 0
                     
                     bool_img = cv2.inRange(bool_img, purple_lower, purple_upper)
-                    # frame = cv2.bitwise_and(frame, frame, mask=purple_full_mask)
+                    bool_img = cv2.bitwise_and(frame, frame, mask=bool_img)
+                    
                     gray_img = cv2.cvtColor(gray_img,cv2.COLOR_HSV2BGR) 
-                    img = gray_img.copy()
+                    img = bool_img
                     
                     
                     #///////////////////////////////////////////////////
