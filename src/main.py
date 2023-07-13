@@ -269,8 +269,8 @@ class CameraColorApp(App):
                     gray_img = img.copy()
                     bool_img = img.copy()
                     
-                    purple_lower = np.array([110,10,20])
-                    purple_upper = np.array([130,255,255])
+                    purple_lower = np.array([120,50,20])
+                    purple_upper = np.array([135,255,255])
                     
                     for x_index,x in enumerate(gray_img):
                         for y_index,y in enumerate(gray_img[x_index]):
