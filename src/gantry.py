@@ -2,6 +2,9 @@
 ## what is self.format line 8*
 ## create function for finding whether or not the purple color is centered
 ## fix the purple color so it doesn't include blues and colors that are too white or black
+## create code.py for the M4 feather
+
+
 
 from __future__ import annotations
 
