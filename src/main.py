@@ -15,15 +15,35 @@ import argparse
 import asyncio
 import os
 from typing import List
+from typing import Optional
 
 import grpc
-import cv2
-import numpy as np
+
+
+# canbus things
+from farm_ng.canbus import canbus_pb2
+from farm_ng.canbus.canbus_client import CanbusClient
+from farm_ng.canbus.packet import AmigaControlState
+from farm_ng.canbus.packet import AmigaTpdo1
+from farm_ng.canbus.packet import make_amiga_rpdo1_proto
+from farm_ng.canbus.packet import parse_amiga_tpdo1_proto
+
+# camera things
 from farm_ng.oak import oak_pb2
 from farm_ng.oak.camera_client import OakCameraClient
 from farm_ng.service import service_pb2
 from farm_ng.service.service_client import ClientConfig
 from turbojpeg import TurboJPEG
+
+### things I've added
+from gantry import GantryControlState
+from gantry import GantryTpdo1
+from gantry import make_gantry_rpdo1_proto
+from gantry import parse_gantry_tpdo1_proto
+
+import cv2
+import numpy as np
+###
 
 os.environ["KIVY_NO_ARGS"] = "1"
 
@@ -42,14 +62,29 @@ from kivy.lang.builder import Builder  # noqa: E402
 from kivy.graphics.texture import Texture  # noqa: E402
 
 
-class CameraApp(App):
-    def __init__(self, address: str, port: int, stream_every_n: int) -> None:
+class CameraColorApp(App):
+    def __init__(self, address: str, camera_port: int, canbus_port: int, stream_every_n: int) -> None:
         super().__init__()
         self.address = address
-        self.port = port
+        self.camera_port : int = camera_port
+        self.canbus_port: int = canbus_port
         self.stream_every_n = stream_every_n
+        
+        self.amiga_tpdo1: AmigaTpdo1 = AmigaTpdo1()
+        self.amiga_state = AmigaControlState.STATE_AUTO_READY
+        self.amiga_rate = 0
+        self.amiga_speed = 0
+        
+        self.gantry_tpdo1: GantryTpdo1 = GantryTpdo1()
+        self.gantry_state = GantryControlState.STATE_AUTO_READY
+        self.gantry_x = 0
+        self.gantry_y = 0
+        self.gantry_feed = 1000
+        self.gantry_relative = 1
+        self.gantry_jog = 1
 
         self.image_decoder = TurboJPEG()
+        
         self.tasks: List[asyncio.Task] = []
 
     def build(self):
@@ -68,13 +103,106 @@ class CameraApp(App):
                 task.cancel()
 
         # configure the camera client
-        config = ClientConfig(address=self.address, port=self.port)
-        client = OakCameraClient(config)
+        camera_config: ClientConfig = ClientConfig(
+            address=self.address, port=self.camera_port
+        )
+        camera_client: OakCameraClient = OakCameraClient(camera_config)
 
-        # Stream camera frames
-        self.tasks.append(asyncio.ensure_future(self.stream_camera(client)))
+        # configure the canbus client
+        canbus_config: ClientConfig = ClientConfig(
+            address=self.address, port=self.canbus_port
+        )
+        canbus_client: CanbusClient = CanbusClient(canbus_config)
+
+        # Camera task(s)
+        self.tasks.append(
+            asyncio.ensure_future(self.stream_camera(camera_client))
+        )
+
+        # Canbus task(s)
+        self.tasks.append(
+            asyncio.ensure_future(self.stream_canbus(canbus_client))
+        )
+        self.tasks.append(
+            asyncio.ensure_future(self.send_can_msgs(canbus_client))
+        )
+
 
         return await asyncio.gather(run_wrapper(), *self.tasks)
+
+
+    async def stream_canbus(self, client: CanbusClient) -> None:
+        """This task:
+
+        - listens to the canbus client's stream
+        - filters for AmigaTpdo1 messages
+        - extracts useful values from AmigaTpdo1 messages
+        """
+        while self.root is None:
+            await asyncio.sleep(0.01)
+
+        response_stream = None
+
+        while True:
+            # check the state of the service
+            state = await client.get_state()
+
+            if state.value not in [
+                service_pb2.ServiceState.IDLE,
+                service_pb2.ServiceState.RUNNING,
+            ]:
+                if response_stream is not None:
+                    response_stream.cancel()
+                    response_stream = None
+
+                print("Canbus service is not streaming or ready to stream")
+                await asyncio.sleep(0.1)
+                continue
+
+            if (
+                response_stream is None
+                and state.value != service_pb2.ServiceState.UNAVAILABLE
+            ):
+                # get the streaming object
+                response_stream = client.stream()
+
+            try:
+                # try/except so app doesn't crash on killed service
+                response: canbus_pb2.StreamCanbusReply = await response_stream.read()
+                assert response and response != grpc.aio.EOF, "End of stream"
+            except Exception as e:
+                print(e)
+                response_stream.cancel()
+                response_stream = None
+                continue
+
+            for proto in response.messages.messages:
+                
+                # Check if message is for the dashboard
+                amiga_tpdo1: Optional[AmigaTpdo1] = parse_amiga_tpdo1_proto(proto)
+                if amiga_tpdo1:
+                    # Store the value for possible other uses
+                    self.amiga_tpdo1 = amiga_tpdo1
+
+                    # Update the Label values as they are received
+                    self.amiga_state = AmigaControlState(amiga_tpdo1.state).name[6:]
+                    self.amiga_speed = str(amiga_tpdo1.meas_speed)
+                    self.amiga_rate = str(amiga_tpdo1.meas_ang_rate)
+                    
+                # Check if message is for the gantry
+                gantry_tpdo1: Optional[GantryTpdo1] = parse_amiga_tpdo1_proto(proto)
+                if gantry_tpdo1:
+                    # Store the value for possible other uses
+                    self.gantry_tpdo1 = gantry_tpdo1
+                    
+                    # Update the Label values as they are received
+                    self.gantry_state = GantryControlState(gantry_tpdo1.state).name[6:]
+                    self.gantry_feed = str(gantry_tpdo1.meas_feed)
+                    self.gantry_x = str(gantry_tpdo1.meas_x)
+                    self.gantry_y = str(gantry_tpdo1.meas_y)
+                    self.gantry_relative = str(gantry_tpdo1.relative)
+                    self.gantry_jog = str(gantry_tpdo1.jog)
+                    
 
     async def stream_camera(self, client: OakCameraClient) -> None:
         """This task listens to the camera client's stream and populates the tabbed panel with all 4 image streams
@@ -137,17 +265,31 @@ class CameraApp(App):
                         getattr(frame, view_name).image_data
                     )
                     ########
-                    
-                    
-                    frame = img
-                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+                    img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+                    gray_img = img.copy()
+                    bool_img = img.copy()
                     
                     purple_lower = np.array([110,10,20])
                     purple_upper = np.array([130,255,255])
-                    purple_full_mask = cv2.inRange(frame, purple_lower, purple_upper)
-                    frame = cv2.bitwise_and(frame, frame, mask=purple_full_mask)
-                    frame = cv2.cvtColor(frame,cv2.COLOR_HSV2BGR) 
-                    img = frame
+                    
+                    for x_index,x in enumerate(gray_img):
+                        for y_index,y in enumerate(gray_img[x_index]):
+                            # for value in purple[x_index][y_index]:
+                            if y[0] > purple_lower[0] and y[0] < purple_upper[0]:
+                                if y[1] > purple_lower[1] and y[1] < purple_upper[1]:
+                                    if y[2] > purple_lower[2] and y[2] < purple_upper[2]:
+                                        pass
+                                    else:
+                                        gray_img[x_index][y_index][1] = 0
+                                else:
+                                    gray_img[x_index][y_index][1] = 0
+                            else:
+                                gray_img[x_index][y_index][1] = 0
+                    
+                    bool_img = cv2.inRange(bool_img, purple_lower, purple_upper)
+                    # frame = cv2.bitwise_and(frame, frame, mask=purple_full_mask)
+                    gray_img = cv2.cvtColor(gray_img,cv2.COLOR_HSV2BGR) 
+                    img = gray_img.copy()
                     
                     
                     ########
@@ -165,23 +307,95 @@ class CameraApp(App):
 
                 except Exception as e:
                     print(e)
+                    
+    async def send_can_msgs(self, client: CanbusClient) -> None:
+        """This task ensures the canbus client sendCanbusMessage method has the pose_generator it will use to send
+        messages on the CAN bus to control the Amiga robot."""
+        while self.root is None:
+            await asyncio.sleep(0.01)
 
+        response_stream = None
+        while True:
+            # check the state of the service
+            state = await client.get_state()
+
+            # Wait for a running CAN bus service
+            if state.value != service_pb2.ServiceState.RUNNING:
+                # Cancel existing stream, if it exists
+                if response_stream is not None:
+                    response_stream.cancel()
+                    response_stream = None
+                print("Waiting for running canbus service...")
+                await asyncio.sleep(0.1)
+                continue
+
+            if response_stream is None:
+                print("Start sending CAN messages")
+                response_stream = client.stub.sendCanbusMessage(self.pose_generator())
+
+            try:
+                async for response in response_stream:
+                    # Sit in this loop and wait until canbus service reports back it is not sending
+                    assert response.success
+            except Exception as e:
+                print(e)
+                response_stream.cancel()
+                response_stream = None
+                continue
+
+            await asyncio.sleep(0.1)
+
+### this is where you will determine whether or not to move the gantry based on the purple color sent.
+    async def pose_generator(self, period: float = 0.02):
+        """The pose generator yields an AmigaRpdo1 (auto control command) for the canbus client to send on the bus
+        at the specified period (recommended 50hz) based on the onscreen joystick position."""
+        while self.root is None:
+            await asyncio.sleep(0.01)
+        ### put the x and y coordinate and feed stuff right here
+        while True:
+            msg: canbus_pb2.RawCanbusMessage = make_gantry_rpdo1_proto(
+                state_req=GantryControlState.STATE_AUTO_ACTIVE,
+                cmd_feed=self.gantry_feed,
+                cmd_x=self.gantry_x + 400,
+                cmd_y = self.gantry_y + 400,
+                relative = self.gantry_relative,
+                jog = self.gantry_jog
+            )
+            yield canbus_pb2.SendCanbusMessageRequest(message=msg)
+            await asyncio.sleep(period)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(prog="amiga-camera-app")
-    parser.add_argument("--port", type=int, required=True, help="The camera port.")
+    parser = argparse.ArgumentParser(prog="color-detector-oak")
     parser.add_argument(
-        "--address", type=str, default="localhost", help="The camera address"
+        "--address", type=str, default="localhost", help="The server address"
     )
     parser.add_argument(
-        "--stream-every-n", type=int, default=1, help="Streaming frequency"
+        "--camera-port",
+        type=int,
+        required=True,
+        help="The grpc port where the camera service is running.",
+    )
+    parser.add_argument(
+        "--canbus-port",
+        type=int,
+        required=True,
+        help="The grpc port where the canbus service is running.",
+    )    
+    # parser.add_argument(
+    #     "--address", type=str, default="localhost", help="The camera address"
+    # )
+    parser.add_argument(
+        "--stream-every-n", 
+        type=int, 
+        default=1, 
+        help="Streaming frequency"
     )
     args = parser.parse_args()
 
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(
-            CameraApp(args.address, args.port, args.stream_every_n).app_func()
+            CameraColorApp(args.address, args.port, args.stream_every_n).app_func()
         )
     except asyncio.CancelledError:
         pass
