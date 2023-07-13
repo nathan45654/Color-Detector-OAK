@@ -186,8 +186,8 @@ class CameraColorApp(App):
 
                     # Update the Label values as they are received
                     self.amiga_state = AmigaControlState(amiga_tpdo1.state).name[6:]
-                    self.amiga_speed = str(amiga_tpdo1.meas_speed)
-                    self.amiga_rate = str(amiga_tpdo1.meas_ang_rate)
+                    self.amiga_speed = amiga_tpdo1.meas_speed
+                    self.amiga_rate = amiga_tpdo1.meas_ang_rate
                     
                 # Check if message is for the gantry
                 gantry_tpdo1: Optional[GantryTpdo1] = parse_amiga_tpdo1_proto(proto)
@@ -197,11 +197,11 @@ class CameraColorApp(App):
                     
                     # Update the Label values as they are received
                     self.gantry_state = GantryControlState(gantry_tpdo1.state).name[6:]
-                    self.gantry_feed = str(gantry_tpdo1.meas_feed)
-                    self.gantry_x = str(gantry_tpdo1.meas_x)
-                    self.gantry_y = str(gantry_tpdo1.meas_y)
-                    self.gantry_relative = str(gantry_tpdo1.relative)
-                    self.gantry_jog = str(gantry_tpdo1.jog)
+                    self.gantry_feed = gantry_tpdo1.meas_feed
+                    self.gantry_x = gantry_tpdo1.meas_x
+                    self.gantry_y = gantry_tpdo1.meas_y
+                    self.gantry_relative = gantry_tpdo1.relative
+                    self.gantry_jog = gantry_tpdo1.jog
                     
 
     async def stream_camera(self, client: OakCameraClient) -> None:
@@ -395,7 +395,7 @@ if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(
-            CameraColorApp(args.address, args.port, args.stream_every_n).app_func()
+            CameraColorApp(args.address, args.camera_port, args.canbus_port, args.stream_every_n).app_func()
         )
     except asyncio.CancelledError:
         pass
