@@ -33,7 +33,7 @@ from farm_ng.oak import oak_pb2
 from farm_ng.oak.camera_client import OakCameraClient
 from farm_ng.service import service_pb2
 from farm_ng.service.service_client import ClientConfig
-from turbojpeg import TurboJPEG
+import turbojpeg
 
 # things I've added #
 from gantry import GantryControlState
@@ -83,7 +83,7 @@ class CameraColorApp(App):
         self.gantry_relative = 1
         self.gantry_jog = 1
 
-        self.image_decoder = TurboJPEG()
+        self.image_decoder = turbojpeg.TurboJPEG()
         
         self.tasks: List[asyncio.Task] = []
 
