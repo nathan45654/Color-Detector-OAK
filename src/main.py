@@ -392,12 +392,12 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    loop = asyncio.get_event_loop()
-    try:
-        loop.run_until_complete(
-            CameraColorApp(args.address, args.camera_port, args.canbus_port, args.stream_every_n).app_func()
-        )
-    except asyncio.CancelledError:
-        pass
-    loop.close()
+    # loop = asyncio.get_event_loop()
+    # try:
+    #     loop.run_until_complete(
+    #         CameraColorApp(args.address, args.camera_port, args.canbus_port, args.stream_every_n).app_func()
+    #     )
+    # except asyncio.CancelledError:
+    #     pass
+    # loop.close()
     
