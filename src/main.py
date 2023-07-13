@@ -120,12 +120,12 @@ class CameraColorApp(App):
         )
 
         # Canbus task(s)
-        self.tasks.append(
-            asyncio.ensure_future(self.stream_canbus(canbus_client))
-        )
-        self.tasks.append(
-            asyncio.ensure_future(self.send_can_msgs(canbus_client))
-        )
+        # self.tasks.append(
+        #     asyncio.ensure_future(self.stream_canbus(canbus_client))
+        # )
+        # self.tasks.append(
+        #     asyncio.ensure_future(self.send_can_msgs(canbus_client))
+        # )
 
 
         return await asyncio.gather(run_wrapper(), *self.tasks)
@@ -365,40 +365,39 @@ class CameraColorApp(App):
             await asyncio.sleep(period)
 
 if __name__ == "__main__":
-    pass
-    # parser = argparse.ArgumentParser(prog="color-detector-oak")
+    parser = argparse.ArgumentParser(prog="color-detector-oak")
+    parser.add_argument(
+        "--address", type=str, default="localhost", help="The server address"
+    )
+    parser.add_argument(
+        "--camera-port",
+        type=int,
+        required=True,
+        help="The grpc port where the camera service is running.",
+    )
+    parser.add_argument(
+        "--canbus-port",
+        type=int,
+        required=True,
+        help="The grpc port where the canbus service is running.",
+    )    
     # parser.add_argument(
-    #     "--address", type=str, default="localhost", help="The server address"
+    #     "--address", type=str, default="localhost", help="The camera address"
     # )
-    # parser.add_argument(
-    #     "--camera-port",
-    #     type=int,
-    #     required=True,
-    #     help="The grpc port where the camera service is running.",
-    # )
-    # parser.add_argument(
-    #     "--canbus-port",
-    #     type=int,
-    #     required=True,
-    #     help="The grpc port where the canbus service is running.",
-    # )    
-    # # parser.add_argument(
-    # #     "--address", type=str, default="localhost", help="The camera address"
-    # # )
-    # parser.add_argument(
-    #     "--stream-every-n", 
-    #     type=int, 
-    #     default=1, 
-    #     help="Streaming frequency"
-    # )
-    # args = parser.parse_args()
+    parser.add_argument(
+        "--stream-every-n", 
+        type=int, 
+        default=1, 
+        help="Streaming frequency"
+    )
+    args = parser.parse_args()
 
-    # loop = asyncio.get_event_loop()
-    # try:
-    #     loop.run_until_complete(
-    #         CameraColorApp(args.address, args.camera_port, args.canbus_port, args.stream_every_n).app_func()
-    #     )
-    # except asyncio.CancelledError:
-    #     pass
-    # loop.close()
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(
+            CameraColorApp(args.address, args.camera_port, args.canbus_port, args.stream_every_n).app_func()
+        )
+    except asyncio.CancelledError:
+        pass
+    loop.close()
     
