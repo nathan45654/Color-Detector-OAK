@@ -250,27 +250,32 @@ class CameraColorApp(App):
                 # Skip if view_name was not included in frame
                 try:
                     # Decode the image and render it in the correct kivy texture
-                    # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-                    
-                    # purple_lower = np.array([110,10,20])
-                    # purple_upper = np.array([130,255,255])
-                    # purple_full_mask = cv2.inRange(frame, purple_lower, purple_upper)
-                    # frame = cv2.bitwise_and(frame, frame, mask=purple_full_mask)
-                    # frame = cv2.cvtColor(frame,cv2.COLOR_HSV2BGR)                    
-                    # img = frame
-                    
-                                     
-                    
                     img = self.image_decoder.decode(
                         getattr(frame, view_name).image_data
                     )
-                    #//////////////////////////////////////////
-                    img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-                    gray_img = img
-                    bool_img = img
+                    frame = img
+                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+                    purple_lower = np.array([110,10,20])
+                    purple_upper = np.array([130,255,255])
+                    purple_full_mask = cv2.inRange(frame, purple_lower, purple_upper)
+                    frame = cv2.bitwise_and(frame, frame, mask=purple_full_mask)
+                    frame = cv2.cvtColor(frame,cv2.COLOR_HSV2BGR) 
+                    img = frame
+                                     
                     
-                    purple_lower = np.array([120,50,20])
-                    purple_upper = np.array([135,255,255])
+                    
+                    #//////////////////////////////////////////
+                    # img = self.image_decoder.decode(
+                    #     getattr(frame, view_name).image_data
+                    # )
+                    
+                    # img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+                    # gray_img = img
+                    # bool_img = img
+                    
+                    # purple_lower = np.array([120,50,20])
+                    # purple_upper = np.array([135,255,255])
                     
                     # for x_index,x in enumerate(gray_img):
                     #     for y_index,y in enumerate(gray_img[x_index]):
@@ -286,11 +291,11 @@ class CameraColorApp(App):
                     #         else:
                     #             gray_img[x_index][y_index][1] = 0
                     
-                    bool_img = cv2.inRange(bool_img, purple_lower, purple_upper)
-                    bool_img = cv2.bitwise_and(frame, frame, mask=bool_img)
+                    # bool_img = cv2.inRange(bool_img, purple_lower, purple_upper)
+                    # bool_img = cv2.bitwise_and(frame, frame, mask=bool_img)
                     
-                    gray_img = cv2.cvtColor(gray_img,cv2.COLOR_HSV2BGR) 
-                    img = bool_img
+                    # gray_img = cv2.cvtColor(gray_img,cv2.COLOR_HSV2BGR) 
+                    # img = bool_img
                     
                     
                     #///////////////////////////////////////////////////
