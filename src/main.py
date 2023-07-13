@@ -25,7 +25,7 @@ from farm_ng.canbus import canbus_pb2
 from farm_ng.canbus.canbus_client import CanbusClient
 from farm_ng.canbus.packet import AmigaControlState
 from farm_ng.canbus.packet import AmigaTpdo1
-from farm_ng.canbus.packet import make_amiga_rpdo1_proto
+# from farm_ng.canbus.packet import make_amiga_rpdo1_proto
 from farm_ng.canbus.packet import parse_amiga_tpdo1_proto
 
 # camera things
@@ -35,7 +35,7 @@ from farm_ng.service import service_pb2
 from farm_ng.service.service_client import ClientConfig
 from turbojpeg import TurboJPEG
 
-### things I've added
+# things I've added #
 from gantry import GantryControlState
 from gantry import GantryTpdo1
 from gantry import make_gantry_rpdo1_proto
@@ -43,7 +43,7 @@ from gantry import parse_gantry_tpdo1_proto
 
 import cv2
 import numpy as np
-###
+# #
 
 os.environ["KIVY_NO_ARGS"] = "1"
 
@@ -264,7 +264,7 @@ class CameraColorApp(App):
                     img = self.image_decoder.decode(
                         getattr(frame, view_name).image_data
                     )
-                    ########
+                    # # #
                     img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
                     gray_img = img.copy()
                     bool_img = img.copy()
@@ -292,7 +292,7 @@ class CameraColorApp(App):
                     img = gray_img.copy()
                     
                     
-                    ########
+                    # # # # # #
                     texture = Texture.create(
                         size=(img.shape[1], img.shape[0]), icolorfmt="bgr"
                     )

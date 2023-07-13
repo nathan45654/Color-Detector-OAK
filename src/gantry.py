@@ -1,7 +1,7 @@
-## what is the cob_id line 72
-## what is self.format line 8*
-## create function for finding whether or not the purple color is centered
-## create code.py for the M4 feather
+# what is the cob_id line 72
+# what is self.format line 8*
+# create function for finding whether or not the purple color is centered
+# create code.py for the M4 feather
 
 
 
@@ -13,8 +13,8 @@ from struct import pack
 from struct import unpack
 
 from farm_ng.canbus import canbus_pb2
-from farm_ng.core.stamp import timestamp_from_monotonic
-from farm_ng.core.timestamp_pb2 import Timestamp
+# from farm_ng.core.stamp import timestamp_from_monotonic
+# from farm_ng.core.timestamp_pb2 import Timestamp
 
 # things I've included
 from farm_ng.canbus.packet import Packet
@@ -173,7 +173,7 @@ class GantryTpdo1(Packet):
 
 
     def __str__(self):
-        return "Gantry TPDO1 Amiga state {} Measured feed {:x} Measured angular rate {:x} @ time {}".format(
+        return "Gantry TPDO1 Amiga state {} Measured feed {:x} Measured x {:x} Measured y{:x} @ time {}".format(
             self.state, self.meas_feed, self.meas_x, self.meas_y, self.stamp.stamp
         ) + "  Relative {} Jog {}".format(self.relative, self.jog)
         
