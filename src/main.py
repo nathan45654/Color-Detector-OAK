@@ -115,10 +115,10 @@ class CameraColorApp(App):
         camera_client: OakCameraClient = OakCameraClient(camera_config)
 
         # configure the canbus client
-        canbus_config: ClientConfig = ClientConfig(
-            address=self.address, port=self.canbus_port
-        )
-        canbus_client: CanbusClient = CanbusClient(canbus_config)
+        # canbus_config: ClientConfig = ClientConfig(
+        #     address=self.address, port=self.canbus_port
+        # )
+        # canbus_client: CanbusClient = CanbusClient(canbus_config)
 
         # Camera task(s)
         # self.tasks.append(
