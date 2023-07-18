@@ -91,7 +91,7 @@ class GantryRpdo1(Packet):
         self.cmd_y = cmd_y
         self.jog = jog
 
-        self.stamp_packet(time.monotonic())
+        self.stamp()
 
     def encode(self):
         """Returns the data contained by the class encoded as CAN message data."""
@@ -140,7 +140,7 @@ class GantryTpdo1(Packet):
         self.meas_y = meas_y
         self.jog = jog
 
-        self.stamp_packet(time.monotonic())
+        self.stamp()
 
     def encode(self):
         """Returns the data contained by the class encoded as CAN message data."""
