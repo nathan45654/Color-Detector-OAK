@@ -322,24 +322,24 @@ class CameraColorApp(App):
         while self.root is None:
             await asyncio.sleep(0.01)
 
-        response_stream = None
-        while True:
-            # check the state of the service
-            state = await client.get_state()
+        # response_stream = None
+        # while True:
+        #     # check the state of the service
+        #     state = await client.get_state()
 
-            # Wait for a running CAN bus service
-            if state.value != service_pb2.ServiceState.RUNNING:
-                # Cancel existing stream, if it exists
-                if response_stream is not None:
-                    response_stream.cancel()
-                    response_stream = None
-                print("Waiting for running canbus service...")
-                await asyncio.sleep(0.1)
-                continue
+        #     # Wait for a running CAN bus service
+        #     if state.value != service_pb2.ServiceState.RUNNING:
+        #         # Cancel existing stream, if it exists
+        #         if response_stream is not None:
+        #             response_stream.cancel()
+        #             response_stream = None
+        #         print("Waiting for running canbus service...")
+        #         await asyncio.sleep(0.1)
+        #         continue
 
-            if response_stream is None:
-                print("Start sending CAN messages")
-                response_stream = client.stub.sendCanbusMessage(self.pose_generator())
+        #     if response_stream is None:
+        #         print("Start sending CAN messages")
+        #         response_stream = client.stub.sendCanbusMessage(self.pose_generator())
 
             '''
             # This isn't working
