@@ -109,29 +109,29 @@ class CameraColorApp(App):
                 task.cancel()
 
         # configure the camera client
-        # camera_config: ClientConfig = ClientConfig(
-        #     address=self.address, port=self.camera_port
-        # )
-        # camera_client: OakCameraClient = OakCameraClient(camera_config)
+        camera_config: ClientConfig = ClientConfig(
+            address=self.address, port=self.camera_port
+        )
+        camera_client: OakCameraClient = OakCameraClient(camera_config)
 
         # configure the canbus client
-        # canbus_config: ClientConfig = ClientConfig(
-        #     address=self.address, port=self.canbus_port
-        # )
-        # canbus_client: CanbusClient = CanbusClient(canbus_config)
+        canbus_config: ClientConfig = ClientConfig(
+            address=self.address, port=self.canbus_port
+        )
+        canbus_client: CanbusClient = CanbusClient(canbus_config)
 
         # Camera task(s)
-        # self.tasks.append(
-        #     asyncio.ensure_future(self.stream_camera(camera_client))
-        # )
+        self.tasks.append(
+            asyncio.ensure_future(self.stream_camera(camera_client))
+        )
 
         # Canbus task(s)
-        # self.tasks.append(
-        #     asyncio.ensure_future(self.stream_canbus(canbus_client))
-        # )
-        # self.tasks.append(
-        #     asyncio.ensure_future(self.send_can_msgs(canbus_client))
-        # )
+        self.tasks.append(
+            asyncio.ensure_future(self.stream_canbus(canbus_client))
+        )
+        self.tasks.append(
+            asyncio.ensure_future(self.send_can_msgs(canbus_client))
+        )
 
 
         return await asyncio.gather(run_wrapper(), *self.tasks)
