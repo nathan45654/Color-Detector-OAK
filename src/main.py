@@ -268,7 +268,7 @@ class CameraColorApp(App):
 
                     purple_lower = np.array([120,70,50])
                     purple_upper = np.array([135,255,255])
-                    purple_amount = 200
+                    purple_amount = 400
                     purple_full_mask = cv2.inRange(frame, purple_lower, purple_upper)
                     
                     
