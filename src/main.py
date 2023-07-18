@@ -336,17 +336,17 @@ class CameraColorApp(App):
                 print("Start sending CAN messages")
                 response_stream = client.stub.sendCanbusMessage(self.pose_generator())
 
-            try:
-                async for response in response_stream:
-                    # Sit in this loop and wait until canbus service reports back it is not sending
-                    assert response.success
-            except Exception as e:
-                print(e)
-                response_stream.cancel()
-                response_stream = None
-                continue
+            # try:
+            #     async for response in response_stream:
+            #         # Sit in this loop and wait until canbus service reports back it is not sending
+            #         assert response.success
+            # except Exception as e:
+            #     print(e)
+            #     response_stream.cancel()
+            #     response_stream = None
+            #     continue
 
-            # await asyncio.sleep(0.1)
+            await asyncio.sleep(0.1)
 
 #// this is where you will determine whether or not to move the gantry based on the purple color sent.
     async def pose_generator(self, period: float = 0.02):
