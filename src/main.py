@@ -130,9 +130,9 @@ class CameraColorApp(App):
         self.tasks.append(
             asyncio.ensure_future(self.stream_canbus(canbus_client))
         )
-        # self.tasks.append(
-        #     asyncio.ensure_future(self.send_can_msgs(canbus_client))
-        # )
+        self.tasks.append(
+            asyncio.ensure_future(self.send_can_msgs(canbus_client))
+        )
 
 
         return await asyncio.gather(run_wrapper(), *self.tasks)
@@ -318,35 +318,35 @@ class CameraColorApp(App):
             await asyncio.sleep(0.01)
 
         response_stream = None
-        while True:
-            # check the state of the service
-            state = await client.get_state()
+        # while True:
+        #     # check the state of the service
+        #     state = await client.get_state()
 
-            # Wait for a running CAN bus service
-            if state.value != service_pb2.ServiceState.RUNNING:
-                # Cancel existing stream, if it exists
-                if response_stream is not None:
-                    response_stream.cancel()
-                    response_stream = None
-                print("Waiting for running canbus service...")
-                await asyncio.sleep(0.1)
-                continue
+        #     # Wait for a running CAN bus service
+        #     if state.value != service_pb2.ServiceState.RUNNING:
+        #         # Cancel existing stream, if it exists
+        #         if response_stream is not None:
+        #             response_stream.cancel()
+        #             response_stream = None
+        #         print("Waiting for running canbus service...")
+        #         await asyncio.sleep(0.1)
+        #         continue
 
-            if response_stream is None:
-                print("Start sending CAN messages")
-                response_stream = client.stub.sendCanbusMessage(self.pose_generator())
+        #     if response_stream is None:
+        #         print("Start sending CAN messages")
+        #         response_stream = client.stub.sendCanbusMessage(self.pose_generator())
 
-            try:
-                async for response in response_stream:
-                    # Sit in this loop and wait until canbus service reports back it is not sending
-                    assert response.success
-            except Exception as e:
-                print(e)
-                response_stream.cancel()
-                response_stream = None
-                continue
+        #     try:
+        #         async for response in response_stream:
+        #             # Sit in this loop and wait until canbus service reports back it is not sending
+        #             assert response.success
+        #     except Exception as e:
+        #         print(e)
+        #         response_stream.cancel()
+        #         response_stream = None
+        #         continue
 
-            await asyncio.sleep(0.1)
+        #     await asyncio.sleep(0.1)
 
 #// this is where you will determine whether or not to move the gantry based on the purple color sent.
     async def pose_generator(self, period: float = 0.02):
