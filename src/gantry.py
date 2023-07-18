@@ -36,7 +36,7 @@ class GantryControlState:
     STATE_ESTOPPED = 6
     
 
-def make_gantry_rpdo2_proto(
+def make_gantry_rpdo1_proto(
     state_req: GantryControlState, cmd_feed: int, cmd_y: int, cmd_x: int, jog: bool
     ) -> canbus_pb2.RawCanbusMessage:
     """Creates a canbus_pb2.RawCanbusMessage.
@@ -57,8 +57,8 @@ def make_gantry_rpdo2_proto(
     """
     # TODO: add some checkers, or make python CHECK_API
     return canbus_pb2.RawCanbusMessage(
-        id=GantryRpdo2.cob_id + GANTRY_ID,
-        data=GantryRpdo2(
+        id=GantryRpdo1.cob_id + GANTRY_ID,
+        data=GantryRpdo1(
             state_req=state_req,
             cmd_feed=cmd_feed,
             cmd_x=cmd_x,
@@ -68,7 +68,7 @@ def make_gantry_rpdo2_proto(
     )
     
     
-class GantryRpdo2(Packet):
+class GantryRpdo1(Packet):
     #State, feed, location, relative, and jog (request) sent to the Amiga vehicle control unit (VCU).
     
 
@@ -111,11 +111,11 @@ class GantryRpdo2(Packet):
 
 
     def __str__(self):
-        return "Gantry RPDO2 Request state {} Command feed {:x} Command x {:x} Command y {:x}".format(
+        return "Gantry Rpdo1 Request state {} Command feed {:x} Command x {:x} Command y {:x}".format(
             self.state_req, self.cmd_feed, self.cmd_x, self.cmd_y
         ) + "  Jog {}".format(self.jog)
 
-class GantryTpdo2(Packet):
+class GantryTpdo1(Packet):
     """State, speed, and angular rate of the Amiga vehicle control unit (VCU).
 
     New in fw v0.1.9 / farm-ng-amiga v0.0.7: Add pto & hbridge control. Message data is now 8 bytes (was 5).
@@ -158,14 +158,14 @@ class GantryTpdo2(Packet):
 
 
     def __str__(self):
-        return "Gantry TPDO2 Amiga state {} Measured feed {:x} Measured x {:x} Measured y{:x} @ time {}".format(
+        return "Gantry Tpdo1 Amiga state {} Measured feed {:x} Measured x {:x} Measured y{:x} @ time {}".format(
             self.state, self.meas_feed, self.meas_x, self.meas_y, self.stamp.stamp
         ) + "  Jog {}".format(self.jog)
         
-def parse_gantry_tpdo2_proto(message: canbus_pb2.RawCanbusMessage) -> GantryTpdo2 | None:
+def parse_gantry_tpdo1_proto(message: canbus_pb2.RawCanbusMessage) -> GantryTpdo1 | None:
     #Parses a canbus_pb2.RawCanbusMessage.
 
-    if message.id != GantryTpdo2.cob_id + GANTRY_ID:
+    if message.id != GantryTpdo1.cob_id + GANTRY_ID:
         return None
-    return GantryTpdo2.from_can_data(message.data, stamp=message.stamp)
+    return GantryTpdo1.from_can_data(message.data, stamp=message.stamp)
 
