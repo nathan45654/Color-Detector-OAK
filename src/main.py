@@ -197,18 +197,18 @@ class CameraColorApp(App):
                     self.amiga_rate = amiga_tpdo1.meas_ang_rate
                     
                 # Check if message is for the gantry
-                # gantry_tpdo1: Optional[GantryTpdo1] = parse_gantry_tpdo1_proto(proto)
-                # if gantry_tpdo1:
-                #     # Store the value for possible other uses
-                #     self.gantry_tpdo1 = gantry_tpdo1
+                gantry_tpdo1: Optional[GantryTpdo1] = parse_gantry_tpdo1_proto(proto)
+                if gantry_tpdo1:
+                    # Store the value for possible other uses
+                    self.gantry_tpdo1 = gantry_tpdo1
                     
-                #     # Update the Label values as they are received
-                #     self.gantry_state = GantryControlState(gantry_tpdo1.state).name[6:]
-                #     self.gantry_feed = gantry_tpdo1.meas_feed
-                #     self.gantry_x = gantry_tpdo1.meas_x
-                #     self.gantry_y = gantry_tpdo1.meas_y
-                #     self.gantry_relative = gantry_tpdo1.relative
-                #     self.gantry_jog = gantry_tpdo1.jog
+                    # Update the Label values as they are received
+                    self.gantry_state = GantryControlState(gantry_tpdo1.state).name[6:]
+                    self.gantry_feed = gantry_tpdo1.meas_feed
+                    self.gantry_x = gantry_tpdo1.meas_x
+                    self.gantry_y = gantry_tpdo1.meas_y
+                    self.gantry_relative = gantry_tpdo1.relative
+                    self.gantry_jog = gantry_tpdo1.jog
                     
 
     async def stream_camera(self, client: OakCameraClient) -> None:
