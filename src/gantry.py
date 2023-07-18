@@ -37,7 +37,7 @@ class GantryControlState:
     
 
 def make_gantry_rpdo1_proto(
-    state_req: GantryControlState, cmd_feed: int, cmd_y: int, cmd_x: int, relative: bool, jog: bool, pto_bits: int = 0x0
+    state_req: GantryControlState, cmd_feed: int, cmd_y: int, cmd_x: int, jog: bool
     ) -> canbus_pb2.RawCanbusMessage:
     """Creates a canbus_pb2.RawCanbusMessage.
 
@@ -63,10 +63,8 @@ def make_gantry_rpdo1_proto(
             cmd_feed=cmd_feed,
             cmd_x=cmd_x,
             cmd_y=cmd_y,
-            relative=relative,
-            jog=jog,
-            pto_bits=pto_bits
-        ).encode(),
+            jog=jog
+            ).encode(),
     )
     
     
@@ -78,13 +76,11 @@ class GantryRpdo1(Packet):
 
     def __init__(
         self,
-        state_req: GantryControlState = GantryControlState.STATE_ESTOPPED,
+        state_req: GantryControlState = GantryControlState.STATE_AUTO_ACTIVE,
         cmd_feed: int = 0,
         cmd_x: int = 0,
         cmd_y: int = 0,
-        relative: bool = True,
         jog: bool = True,
-        pto_bits: int = 0x0
     ):
         self.format = "<BhhBBx"
         self.legacy_format = "<Bhh"
@@ -93,9 +89,7 @@ class GantryRpdo1(Packet):
         self.cmd_feed = cmd_feed
         self.cmd_x = cmd_x
         self.cmd_y = cmd_y
-        self.relative = relative
         self.jog = jog
-        self.pto_bits = pto_bits
 
         self.stamp_packet(time.monotonic())
 
@@ -107,21 +101,19 @@ class GantryRpdo1(Packet):
             self.cmd_feed,
             self.cmd_x,
             self.cmd_y,
-            self.relative,
             self.jog,
-            self.pto_bits,
         )
 
     def decode(self, data):
         """Decodes CAN message data and populates the values of the class."""
 
-        (self.state_req, self.cmd_feed, self.cmd_x, self.cmd_y, self.relative, self.jog, self.pto_bits) = unpack(self.format, data)
+        (self.state_req, self.cmd_feed, self.cmd_x, self.cmd_y,self.jog) = unpack(self.format, data)
 
 
     def __str__(self):
         return "Gantry RPDO1 Request state {} Command feed {:x} Command x {:x} Command y {:x}".format(
             self.state_req, self.cmd_feed, self.cmd_x, self.cmd_y
-        ) + "  Relative {} Jog {}".format(self.relative, self.jog)
+        ) + "  Jog {}".format(self.jog)
 
 class GantryTpdo1(Packet):
     """State, speed, and angular rate of the Amiga vehicle control unit (VCU).
@@ -133,13 +125,11 @@ class GantryTpdo1(Packet):
 
     def __init__(
         self,
-        state: GantryControlState = GantryControlState.STATE_ESTOPPED,
+        state: GantryControlState = GantryControlState.STATE_AUTO_ACTIVE,
         meas_feed: int = 0,
         meas_x: int = 0,
         meas_y: int = 0,
-        relative: bool = True,
         jog: bool = True,
-        pto_bits: int = 0x0,
     ):
         self.format = "<BhhBBx"
         self.legacy_format = "<Bhh"
@@ -148,9 +138,7 @@ class GantryTpdo1(Packet):
         self.meas_feed = meas_feed
         self.meas_x = meas_x
         self.meas_y = meas_y
-        self.relative = relative
         self.jog = jog
-        self.pto_bits = pto_bits
 
         self.stamp_packet(time.monotonic())
 
@@ -161,20 +149,18 @@ class GantryTpdo1(Packet):
             self.state,
             self.meas_feed,
             self.meas_x,
-            self.relative,
             self.jog,
-            self.pto_bits,
         )
 
     def decode(self, data):
         """Decodes CAN message data and populates the values of the class."""
-        (self.state, self.meas_feed, self.meas_x, self.meas_y, self.pto_bits, self.hbridge_bits) = unpack(self.format, data)
+        (self.state, self.meas_feed, self.meas_x, self.meas_y) = unpack(self.format, data)
 
 
     def __str__(self):
         return "Gantry TPDO1 Amiga state {} Measured feed {:x} Measured x {:x} Measured y{:x} @ time {}".format(
             self.state, self.meas_feed, self.meas_x, self.meas_y, self.stamp.stamp
-        ) + "  Relative {} Jog {}".format(self.relative, self.jog)
+        ) + "  Jog {}".format(self.jog)
         
 def parse_gantry_tpdo1_proto(message: canbus_pb2.RawCanbusMessage) -> GantryTpdo1 | None:
     #Parses a canbus_pb2.RawCanbusMessage.
