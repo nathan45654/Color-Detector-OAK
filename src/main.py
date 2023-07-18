@@ -109,10 +109,10 @@ class CameraColorApp(App):
                 task.cancel()
 
         # configure the camera client
-        camera_config: ClientConfig = ClientConfig(
-            address=self.address, port=self.camera_port
-        )
-        camera_client: OakCameraClient = OakCameraClient(camera_config)
+        # camera_config: ClientConfig = ClientConfig(
+        #     address=self.address, port=self.camera_port
+        # )
+        # camera_client: OakCameraClient = OakCameraClient(camera_config)
 
         # configure the canbus client
         # canbus_config: ClientConfig = ClientConfig(
