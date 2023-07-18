@@ -289,7 +289,7 @@ class CameraColorApp(App):
                     
                     #######
                     # put text and highlight the center
-                    # cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
+                    cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
                     # cv2.putText(purple_result, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                     #######
                     img = frame
