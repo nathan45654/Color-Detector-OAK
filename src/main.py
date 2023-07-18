@@ -171,7 +171,7 @@ class CameraColorApp(App):
                 and state.value != service_pb2.ServiceState.UNAVAILABLE
             ):
                 # get the streaming object
-                response_stream = client.stream()
+                response_stream = client.stream_raw()
                 # pass
 
             # try:
