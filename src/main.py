@@ -121,9 +121,9 @@ class CameraColorApp(App):
         canbus_client: CanbusClient = CanbusClient(canbus_config)
 
         # Camera task(s)
-        self.tasks.append(
-            asyncio.ensure_future(self.stream_camera(camera_client))
-        )
+        # self.tasks.append(
+        #     asyncio.ensure_future(self.stream_camera(camera_client))
+        # )
 
         # Canbus task(s)
         # self.tasks.append(
