@@ -8,7 +8,6 @@
 from __future__ import annotations
 
 import time
-from enum import IntEnum
 from struct import pack
 from struct import unpack
 
@@ -25,7 +24,7 @@ GANTRY_ID = 0x12
 # feed rate, x position, y position
 
 
-class GantryControlState(IntEnum):
+class GantryControlState:
     """State of the Amiga vehicle control unit (VCU)"""
 
     # TODO: add some comments about this states
