@@ -273,14 +273,17 @@ class CameraColorApp(App):
                     
                     #//////////// calculate the middle of all purple, set gantry_x and gantry_y to location of blob center
                     # calculate moments of binary image
-                    ret,thresh = cv2.threshold(purple_full_mask,127,255,0)
- 
-                    # calculate moments of binary image
-                    M = cv2.moments(thresh)
-                    
-                    # calculate x,y coordinate of center
-                    cX = int(M["m10"] / M["m00"])
-                    cY = int(M["m01"] / M["m00"])
+                    cX = None
+                    cY = None
+                    if np.count_nonzero(purple_full_mask) >= 50:
+                        ret,thresh = cv2.threshold(purple_full_mask,127,255,0)
+    
+                        # calculate moments of binary image
+                        M = cv2.moments(thresh)
+                        
+                        # calculate x,y coordinate of center
+                        cX = int(M["m10"] / M["m00"])
+                        cY = int(M["m01"] / M["m00"])
                     #////////////
                     
                     
@@ -289,7 +292,8 @@ class CameraColorApp(App):
                     
                     #######
                     # put text and highlight the center
-                    cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
+                    if cX and cY:
+                        cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
                     # cv2.putText(purple_result, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                     #######
                     img = frame
