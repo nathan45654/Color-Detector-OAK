@@ -336,15 +336,19 @@ class CameraColorApp(App):
                 print("Start sending CAN messages")
                 response_stream = client.stub.sendCanbusMessage(self.pose_generator())
 
-            # try:
-            #     async for response in response_stream:
-            #         # Sit in this loop and wait until canbus service reports back it is not sending
-            #         assert response.success
-            # except Exception as e:
-            #     print(e)
-            #     response_stream.cancel()
-            #     response_stream = None
-            #     continue
+            '''
+            # This isn't working
+            try:
+                async for response in response_stream:
+                    # Sit in this loop and wait until canbus service reports back it is not sending
+                    assert response.success
+            except Exception as e:
+                print(e)
+                response_stream.cancel()
+                response_stream = None
+                continue
+            '''
+            
 
             await asyncio.sleep(0.1)
 
