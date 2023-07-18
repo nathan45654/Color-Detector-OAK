@@ -339,12 +339,11 @@ class CameraColorApp(App):
             try:
                 async for response in response_stream:
                     # Sit in this loop and wait until canbus service reports back it is not sending
-                    # assert response.success
-                    pass
+                    assert response.success
             except Exception as e:
-                print(e)
-                response_stream.cancel()
-                response_stream = None
+                # print(e)
+                # response_stream.cancel()
+                # response_stream = None
                 continue
 
             await asyncio.sleep(0.1)
