@@ -268,6 +268,7 @@ class CameraColorApp(App):
 
                     purple_lower = np.array([120,70,50])
                     purple_upper = np.array([135,255,255])
+                    purple_amount = 200
                     purple_full_mask = cv2.inRange(frame, purple_lower, purple_upper)
                     
                     
@@ -275,7 +276,7 @@ class CameraColorApp(App):
                     # calculate moments of binary image
                     cX = None
                     cY = None
-                    if np.count_nonzero(purple_full_mask) >= 50:
+                    if np.count_nonzero(purple_full_mask) >= purple_amount:
                         ret,thresh = cv2.threshold(purple_full_mask,127,255,0)
     
                         # calculate moments of binary image
