@@ -91,7 +91,7 @@ class GantryRpdo1(Packet):
         self.cmd_y = cmd_y
         self.jog = jog
 
-        self.stamp_packet(time.monotonic())
+        self.stamp()
 
     def encode(self):
         """Returns the data contained by the class encoded as CAN message data."""
@@ -111,7 +111,7 @@ class GantryRpdo1(Packet):
 
 
     def __str__(self):
-        return "Gantry RPDO1 Request state {} Command feed {:x} Command x {:x} Command y {:x}".format(
+        return "Gantry Rpdo1 Request state {} Command feed {:x} Command x {:x} Command y {:x}".format(
             self.state_req, self.cmd_feed, self.cmd_x, self.cmd_y
         ) + "  Jog {}".format(self.jog)
 
@@ -140,7 +140,7 @@ class GantryTpdo1(Packet):
         self.meas_y = meas_y
         self.jog = jog
 
-        self.stamp_packet(time.monotonic())
+        self.stamp()
 
     def encode(self):
         """Returns the data contained by the class encoded as CAN message data."""
@@ -158,7 +158,7 @@ class GantryTpdo1(Packet):
 
 
     def __str__(self):
-        return "Gantry TPDO1 Amiga state {} Measured feed {:x} Measured x {:x} Measured y{:x} @ time {}".format(
+        return "Gantry Tpdo1 Amiga state {} Measured feed {:x} Measured x {:x} Measured y{:x} @ time {}".format(
             self.state, self.meas_feed, self.meas_x, self.meas_y, self.stamp.stamp
         ) + "  Jog {}".format(self.jog)
         
