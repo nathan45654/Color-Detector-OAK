@@ -50,7 +50,7 @@ from gantry import parse_gantry_tpdo1_proto
 
 import cv2
 import numpy as np
-# #
+#----#
 
 os.environ["KIVY_NO_ARGS"] = "1"
 
@@ -87,7 +87,6 @@ class CameraColorApp(App):
         self.gantry_x = 0
         self.gantry_y = 0
         self.gantry_feed = 1000
-        self.gantry_relative = 1
         self.gantry_jog = 1
 
         self.image_decoder = turbojpeg.TurboJPEG()
@@ -193,6 +192,7 @@ class CameraColorApp(App):
 
                     # Update the Label values as they are received
                     self.amiga_state = AmigaControlState(amiga_tpdo1.state).name[6:]
+                    
                     self.amiga_speed = amiga_tpdo1.meas_speed
                     self.amiga_rate = amiga_tpdo1.meas_ang_rate
                     
@@ -207,7 +207,6 @@ class CameraColorApp(App):
                     self.gantry_feed = gantry_tpdo1.meas_feed
                     self.gantry_x = gantry_tpdo1.meas_x
                     self.gantry_y = gantry_tpdo1.meas_y
-                    self.gantry_relative = gantry_tpdo1.relative
                     self.gantry_jog = gantry_tpdo1.jog
                     
 
@@ -367,11 +366,10 @@ class CameraColorApp(App):
         #// put the x and y coordinate and feed stuff right here
         while True:
             msg: canbus_pb2.RawCanbusMessage = make_gantry_rpdo1_proto(
-                state_req=GantryControlState.STATE_AUTO_ACTIVE,
-                cmd_feed=self.gantry_feed,
-                cmd_x=self.gantry_x + 400,
-                cmd_y = self.gantry_y + 400,
-                relative = self.gantry_relative,
+                state_req = GantryControlState.STATE_AUTO_ACTIVE,
+                cmd_feed = self.gantry_feed,
+                cmd_x = self.gantry_x,
+                cmd_y = self.gantry_y,
                 jog = self.gantry_jog
             )
             yield canbus_pb2.SendCanbusMessageRequest(message=msg)
