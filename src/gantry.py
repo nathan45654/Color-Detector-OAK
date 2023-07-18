@@ -72,7 +72,7 @@ class GantryRpdo1(Packet):
     #State, feed, location, relative, and jog (request) sent to the Amiga vehicle control unit (VCU).
     
 
-    cob_id = 0x200
+    cob_id = 0x300
 
     def __init__(
         self,
@@ -111,7 +111,7 @@ class GantryRpdo1(Packet):
 
 
     def __str__(self):
-        return "Gantry RPDO1 Request state {} Command feed {:x} Command x {:x} Command y {:x}".format(
+        return "Gantry Rpdo1 Request state {} Command feed {:x} Command x {:x} Command y {:x}".format(
             self.state_req, self.cmd_feed, self.cmd_x, self.cmd_y
         ) + "  Jog {}".format(self.jog)
 
@@ -121,7 +121,7 @@ class GantryTpdo1(Packet):
     New in fw v0.1.9 / farm-ng-amiga v0.0.7: Add pto & hbridge control. Message data is now 8 bytes (was 5).
     """
 
-    cob_id = 0x180
+    cob_id = 0x280
 
     def __init__(
         self,
@@ -158,7 +158,7 @@ class GantryTpdo1(Packet):
 
 
     def __str__(self):
-        return "Gantry TPDO1 Amiga state {} Measured feed {:x} Measured x {:x} Measured y{:x} @ time {}".format(
+        return "Gantry Tpdo1 Amiga state {} Measured feed {:x} Measured x {:x} Measured y{:x} @ time {}".format(
             self.state, self.meas_feed, self.meas_x, self.meas_y, self.stamp.stamp
         ) + "  Jog {}".format(self.jog)
         
