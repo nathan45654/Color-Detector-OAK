@@ -259,7 +259,7 @@ class CameraColorApp(App):
                     img = self.image_decoder.decode(
                         getattr(frame, view_name).image_data
                     )
-                    if view_name is 'rgb':
+                    if view_name == 'rgb':
                         #////////////////////////////////////////// Added in color filtering
 
                         
