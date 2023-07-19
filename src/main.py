@@ -13,9 +13,8 @@
 # limitations under the License.
 
 # To do:
-# figure out why stream_canbus doesn't work. 
-    # maybe comment out all of your canbus messages and try to use the amiga ones
-    # definitely something to do with the client.stream()
+# get all of the Tpdo and Rpdo good. Draw a diagram please so you get it right
+# get the depth and color cameras working in sync
 
 
 import argparse
