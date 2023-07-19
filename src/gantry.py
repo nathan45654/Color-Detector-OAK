@@ -36,8 +36,7 @@ class GantryControlState:
     STATE_ESTOPPED = 6
     
 
-def make_gantry_rpdo1_proto(
-    state_req: GantryControlState, cmd_feed: int, cmd_y: int, cmd_x: int, jog: bool
+def make_gantry_rpdo1_proto(R_y: int, R_x: int
     ) -> canbus_pb2.RawCanbusMessage:
     """Creates a canbus_pb2.RawCanbusMessage.
 
@@ -59,62 +58,52 @@ def make_gantry_rpdo1_proto(
     return canbus_pb2.RawCanbusMessage(
         id=GantryRpdo1.cob_id + GANTRY_ID,
         data=GantryRpdo1(
-            state_req=state_req,
-            cmd_feed=cmd_feed,
-            cmd_x=cmd_x,
-            cmd_y=cmd_y,
-            jog=jog
+            R_x=R_x,
+            R_y=R_y,
             ).encode(),
     )
     
-    
+#/////////////
 class GantryRpdo1(Packet):
-    #State, feed, location, relative, and jog (request) sent to the Amiga vehicle control unit (VCU).
+    #State, feed, location sent to the Amiga vehicle control unit (VCU).
     
 
     cob_id = 0x200
 
     def __init__(
         self,
-        state_req: GantryControlState = GantryControlState.STATE_AUTO_ACTIVE,
-        cmd_feed: int = 0,
-        cmd_x: int = 0,
-        cmd_y: int = 0,
-        jog: bool = True,
+        R_state: GantryControlState = GantryControlState.STATE_ESTOPPED,
+        R_x: int = 0,
+        R_y: int = 0
     ):
-        self.format = "<BhhBBx"
-        self.legacy_format = "<Bhh"
+        self.format = '<2I'
 
-        self.state_req = state_req
-        self.cmd_feed = cmd_feed
-        self.cmd_x = cmd_x
-        self.cmd_y = cmd_y
-        self.jog = jog
+        # self.R_state = R_state
+        self.R_x = R_x
+        self.R_y = R_y
 
-        self.stamp_packet(time.monotonic())
+        self.stamp()
 
     def encode(self):
         """Returns the data contained by the class encoded as CAN message data."""
         return pack(
-            self.format,
-            self.state_req,
-            self.cmd_feed,
-            self.cmd_x,
-            self.cmd_y,
-            self.jog,
+            self.format, 
+            self.R_x, 
+            self.R_y
         )
 
     def decode(self, data):
         """Decodes CAN message data and populates the values of the class."""
 
-        (self.state_req, self.cmd_feed, self.cmd_x, self.cmd_y,self.jog) = unpack(self.format, data)
+        (self.R_x, self.R_y) = unpack(self.format, data)
 
 
     def __str__(self):
-        return "Gantry Rpdo1 Request state {} Command feed {:x} Command x {:x} Command y {:x}".format(
-            self.state_req, self.cmd_feed, self.cmd_x, self.cmd_y
-        ) + "  Jog {}".format(self.jog)
+        return "Gantry Rpdo1 R state {} R x {:x} R y {:x}".format(
+            self.R_x, self.R_y)
+#/////////////
 
+#/////////////
 class GantryTpdo1(Packet):
     """State, speed, and angular rate of the Amiga vehicle control unit (VCU).
 
@@ -125,43 +114,37 @@ class GantryTpdo1(Packet):
 
     def __init__(
         self,
-        state: GantryControlState = GantryControlState.STATE_AUTO_ACTIVE,
-        meas_feed: int = 0,
-        meas_x: int = 0,
-        meas_y: int = 0,
-        jog: bool = True,
+        T_state: GantryControlState = GantryControlState.STATE_ESTOPPED,
+        T_x: int = 0,
+        T_y: int = 0,
     ):
-        self.format = "<BhhBBx"
-        self.legacy_format = "<Bhh"
+        self.format = str("<2I")
 
-        self.state = state
-        self.meas_feed = meas_feed
-        self.meas_x = meas_x
-        self.meas_y = meas_y
-        self.jog = jog
+        # self.T_state = T_state
+        self.T_x = T_x
+        self.T_y = T_y
 
-        self.stamp_packet(time.monotonic())
+        self.stamp()
 
     def encode(self):
         """Returns the data contained by the class encoded as CAN message data."""
         return pack(
             self.format,
-            self.state,
-            self.meas_feed,
-            self.meas_x,
-            self.jog,
+            # self.T_state,
+            self.T_x,
+            self.T_y
         )
 
     def decode(self, data):
         """Decodes CAN message data and populates the values of the class."""
-        (self.state, self.meas_feed, self.meas_x, self.meas_y) = unpack(self.format, data)
+        (self.T_x, self.T_y) = unpack(self.format, data)
 
 
     def __str__(self):
-        return "Gantry Tpdo1 Amiga state {} Measured feed {:x} Measured x {:x} Measured y{:x} @ time {}".format(
-            self.state, self.meas_feed, self.meas_x, self.meas_y, self.stamp.stamp
-        ) + "  Jog {}".format(self.jog)
-        
+        return "Gantry Tpdo1 T_state {} T x {:x} T y{:x} @ time {}".format(
+            self.T_x, self.T_y, self.stamp)
+#/////////////
+    
 def parse_gantry_tpdo1_proto(message: canbus_pb2.RawCanbusMessage) -> GantryTpdo1 | None:
     #Parses a canbus_pb2.RawCanbusMessage.
 
