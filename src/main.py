@@ -314,7 +314,9 @@ class CameraColorApp(App):
                         
                     elif view_name == "disparity":
                         
-                        img = disparity_img
+                        img = self.image_decoder.decode(
+                            getattr(frame, "disparity").image_data
+                        )
                         img = cv2.resize(img,rgb_size)
                         # if cX and cY:
                             # text = "Distance: " + str(img[cY])
