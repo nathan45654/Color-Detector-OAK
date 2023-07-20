@@ -251,7 +251,7 @@ class CameraColorApp(App):
             frame: oak_pb2.OakSyncFrame = response.frame
 
             # get image and show
-            for view_name in ["rgb", "disparity", "left", "right"]:
+            for view_name in ["rgb", "distance", "disparity", "left", "right"]:
                 # Skip if view_name was not included in frame
                 try:
                     # Decode the image and render it in the correct kivy texture
