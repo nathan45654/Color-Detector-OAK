@@ -298,14 +298,14 @@ class CameraColorApp(App):
                         # # cv2.putText(purple_result, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                         # #######    
                         
-                        # disparity_img = self.image_decoder.decode(
-                        #     getattr(frame, "disparity").image_data
-                        # )
+                        disparity_img = self.image_decoder.decode(
+                            getattr(frame, "disparity").image_data
+                        )
                         # disparity_img = cv2.resize(disparity_img,(img.shape[1], img.shape[0]))
                         #-----#
                         # put text and highlight the center
                         if cX and cY:
-                            cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
+                            cv2.circle(img, (cX, cY), 5, (255, 255, 255), -1)
                             # text = "Center: " + str(disparity_img(cY,cX))
                             # cv2.putText(img, text, (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                         #-----#
