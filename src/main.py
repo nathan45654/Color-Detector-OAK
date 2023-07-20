@@ -285,9 +285,7 @@ class CameraColorApp(App):
                             cX = int(M["m10"] / M["m00"])
                             cY = int(M["m01"] / M["m00"])
                         #////////////
-                        if cX and cY:
-                            cv2.circle(img, (cX, cY), 5, (255, 255, 255), -1)
-                            text = "Center: " + str(img[cY][cX])
+                        
                         
                         img = cv2.bitwise_and(img, img, mask=purple_full_mask)
                         img = cv2.cvtColor(img,cv2.COLOR_HSV2BGR) 
@@ -308,6 +306,8 @@ class CameraColorApp(App):
                         # #-----#
                         # # put text and highlight the center
                         if cX and cY:
+                            cv2.circle(img, (cX, cY), 5, (255, 255, 255), -1)
+                            text = "Center: " + str(disparity_img[cX][cY])
                             cv2.putText(img, text, (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
                         #-----#
                         
