@@ -299,6 +299,17 @@ class CameraColorApp(App):
                         # cv2.putText(purple_result, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                         #######
                         img = frame
+                        texture = Texture.create(
+                            size=(img.shape[1], img.shape[0]), icolorfmt="bgr"
+                        )
+                        texture.flip_vertical()
+                        texture.blit_buffer(
+                            img.tobytes(),
+                            colorfmt="bgr",
+                            bufferfmt="ubyte",
+                            mipmap_generation=False,
+                        )
+                        self.root.ids[view_name].texture = texture
                         
                         
                     elif view_name == "distance":
@@ -306,6 +317,17 @@ class CameraColorApp(App):
                         img = self.image_decoder.decode(
                             getattr(frame, "rgb").image_data
                         )
+                        texture = Texture.create(
+                            size=(img.shape[1], img.shape[0]), icolorfmt="bgr"
+                        )
+                        texture.flip_vertical()
+                        texture.blit_buffer(
+                            img.tobytes(),
+                            colorfmt="bgr",
+                            bufferfmt="ubyte",
+                            mipmap_generation=False,
+                        )
+                        self.root.ids["distance"].texture = texture
                     #     frame = rgb_img
                     #     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
@@ -356,6 +378,17 @@ class CameraColorApp(App):
                         img = self.image_decoder.decode(
                             getattr(frame, view_name).image_data
                         )
+                        texture = Texture.create(
+                            size=(img.shape[1], img.shape[0]), icolorfmt="bgr"
+                        )
+                        texture.flip_vertical()
+                        texture.blit_buffer(
+                            img.tobytes(),
+                            colorfmt="bgr",
+                            bufferfmt="ubyte",
+                            mipmap_generation=False,
+                        )
+                        self.root.ids[view_name].texture = texture
                         
                         
                         
