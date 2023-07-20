@@ -258,49 +258,49 @@ class CameraColorApp(App):
                     img = self.image_decoder.decode(
                         getattr(frame, view_name).image_data
                     )
-                    # if view_name == 'rgb':
-                    #     #////////////////////////////////////////// Added in color filtering
+                    if view_name == "rgb":
+                        #////////////////////////////////////////// Added in color filtering
 
                         
-                    #     frame = img
-                    #     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+                        frame = img
+                        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-                    #     purple_lower = np.array([120,70,50])
-                    #     purple_upper = np.array([135,255,255])
-                    #     purple_amount = 400
-                    #     purple_full_mask = cv2.inRange(frame, purple_lower, purple_upper)
+                        purple_lower = np.array([120,70,50])
+                        purple_upper = np.array([135,255,255])
+                        purple_amount = 400
+                        purple_full_mask = cv2.inRange(frame, purple_lower, purple_upper)
                         
                         
-                    #     #//////////// calculate the middle of all purple, set gantry_x and gantry_y to location of blob center
-                    #     # calculate moments of binary image
-                    #     cX = None
-                    #     cY = None
-                    #     if np.count_nonzero(purple_full_mask) >= purple_amount:
-                    #         ret,thresh = cv2.threshold(purple_full_mask,127,255,0)
+                        #//////////// calculate the middle of all purple, set gantry_x and gantry_y to location of blob center
+                        # calculate moments of binary image
+                        cX = None
+                        cY = None
+                        if np.count_nonzero(purple_full_mask) >= purple_amount:
+                            ret,thresh = cv2.threshold(purple_full_mask,127,255,0)
         
-                    #         # calculate moments of binary image
-                    #         M = cv2.moments(thresh)
+                            # calculate moments of binary image
+                            M = cv2.moments(thresh)
                             
-                    #         # calculate x,y coordinate of center
-                    #         cX = int(M["m10"] / M["m00"])
-                    #         cY = int(M["m01"] / M["m00"])
-                    #     #////////////
+                            # calculate x,y coordinate of center
+                            cX = int(M["m10"] / M["m00"])
+                            cY = int(M["m01"] / M["m00"])
+                        #////////////
                         
                         
-                    #     frame = cv2.bitwise_and(frame, frame, mask=purple_full_mask)
-                    #     frame = cv2.cvtColor(frame,cv2.COLOR_HSV2BGR) 
+                        frame = cv2.bitwise_and(frame, frame, mask=purple_full_mask)
+                        frame = cv2.cvtColor(frame,cv2.COLOR_HSV2BGR) 
                         
-                    #     #######
-                    #     # put text and highlight the center
-                    #     if cX and cY:
-                    #         cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
-                    #     # cv2.putText(purple_result, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-                    #     #######
-                    #     img = frame
+                        #######
+                        # put text and highlight the center
+                        if cX and cY:
+                            cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
+                        # cv2.putText(purple_result, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                        #######
+                        img = frame
                         
-                    #     #///////////////////////////////////////////////////
-                    # else:
-                    #     pass
+                        #///////////////////////////////////////////////////
+                    else:
+                        pass
                     
                     texture = Texture.create(
                         size=(img.shape[1], img.shape[0]), icolorfmt="bgr"
