@@ -258,7 +258,7 @@ class CameraColorApp(App):
                     img = self.image_decoder.decode(
                             getattr(frame, view_name).image_data
                         )
-                    '''
+                    
                     #----------rgb and purple filtering----------#
                     if view_name == 'rgb':
                         
@@ -298,7 +298,7 @@ class CameraColorApp(App):
                         # cv2.putText(purple_result, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                         #######
                         img = frame
-                        '''
+                        
                                  
                         
                     #     disparity_img = self.image_decoder.decode(
