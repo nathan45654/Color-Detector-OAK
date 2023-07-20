@@ -255,12 +255,13 @@ class CameraColorApp(App):
                 # Skip if view_name was not included in frame
                 try:
                     # Decode the image and render it in the correct kivy texture
-                    img = self.image_decoder.decode(
-                            getattr(frame, view_name).image_data
-                        )
+                    
                     
                     #----------rgb and purple filtering----------#
                     if view_name == 'rgb':
+                        img = self.image_decoder.decode(
+                            getattr(frame, view_name).image_data
+                        )
                         
                         img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
@@ -311,13 +312,16 @@ class CameraColorApp(App):
                         
                     elif view_name == "disparity":
                         
+                        img = disparity_img
                         img = cv2.resize(img,rgb_size)
                         # if cX and cY:
                             # text = "Distance: " + str(img[cY])
                             # cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
                             # cv2.putText(img, text, (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                     else:
-                        pass
+                        img = self.image_decoder.decode(
+                            getattr(frame, view_name).image_data
+                        )
                         
                         
                         
