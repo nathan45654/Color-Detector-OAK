@@ -311,15 +311,15 @@ class CameraColorApp(App):
                     #         cv2.putText(img, text, (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                     #     #-----#
                         
-                    # elif view_name == "disparity":
+                    elif view_name == "disparity":
                         
-                    #     img = cv2.resize(img,rgb_size)
-                    #     if cX and cY:
-                    #         text = "Distance: " + str(img[cY][cX])
-                    #         cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
-                    #         cv2.putText(img, text, (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-                    # else:
-                    #     pass
+                        img = cv2.resize(img,rgb_size)
+                        if cX and cY:
+                            text = "Distance: " + str(img[cY][cX])
+                            cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
+                            cv2.putText(img, text, (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                    else:
+                        pass
                         
                         
                         
