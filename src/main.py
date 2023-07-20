@@ -262,13 +262,12 @@ class CameraColorApp(App):
                     #----------rgb and purple filtering----------#
                     if view_name == 'rgb':
                         
-                        frame = img
-                        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+                        img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
                         purple_lower = np.array([120,70,50])
                         purple_upper = np.array([135,255,255])
                         purple_amount = 400
-                        purple_full_mask = cv2.inRange(frame, purple_lower, purple_upper)
+                        purple_full_mask = cv2.inRange(img, purple_lower, purple_upper)
                         rgb_size = (img.shape[1],img.shape[0])                        
                         
                         #//////////// calculate the middle of all purple, set gantry_x and gantry_y to location of blob center
@@ -287,17 +286,16 @@ class CameraColorApp(App):
                         #////////////
                         
                         
-                        frame = cv2.bitwise_and(frame, frame, mask=purple_full_mask)
-                        frame = cv2.cvtColor(frame,cv2.COLOR_HSV2BGR) 
+                        img = cv2.bitwise_and(img, img, mask=purple_full_mask)
+                        img = cv2.cvtColor(img,cv2.COLOR_HSV2BGR) 
                         
                         
                         #######
                         # put text and highlight the center
                         if cX and cY:
-                            cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
+                            cv2.circle(img, (cX, cY), 5, (255, 255, 255), -1)
                         # cv2.putText(purple_result, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                         #######
-                        img = frame
                         
                                  
                         
