@@ -292,6 +292,10 @@ class CameraColorApp(App):
                         frame = cv2.bitwise_and(frame, frame, mask=purple_full_mask)
                         frame = cv2.cvtColor(frame,cv2.COLOR_HSV2BGR) 
                         
+                        disparity_img = self.image_decoder.decode(
+                            getattr(frame, "disparity").image_data
+                        )
+                        disparity_img = cv2.resize(disparity_img,(img.shape[1], img.shape[0]))
                         #######
                         # put text and highlight the center
                         if cX and cY:
