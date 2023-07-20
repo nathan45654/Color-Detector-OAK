@@ -287,7 +287,7 @@ class CameraColorApp(App):
                         #////////////
                         if cX and cY:
                             cv2.circle(img, (cX, cY), 5, (255, 255, 255), -1)
-                            text = "Center: " + str(img[cX][cY])
+                            text = "Center: " + str(img[cY][cX])
                         
                         img = cv2.bitwise_and(img, img, mask=purple_full_mask)
                         img = cv2.cvtColor(img,cv2.COLOR_HSV2BGR) 
