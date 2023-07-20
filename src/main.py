@@ -306,8 +306,8 @@ class CameraColorApp(App):
                         # put text and highlight the center
                         if cX and cY:
                             cv2.circle(img, (cX, cY), 5, (255, 255, 255), -1)
-                            # text = "Center: " + str(disparity_img(cY,cX))
-                            # cv2.putText(img, text, (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                            text = "Center: " + str(disparity_img(cY,cX))
+                            cv2.putText(img, text, (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                         #-----#
                         
                     elif view_name == "disparity":
