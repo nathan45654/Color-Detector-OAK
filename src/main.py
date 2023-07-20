@@ -302,10 +302,10 @@ class CameraColorApp(App):
                         
                         
                     elif view_name == "distance":
-                        pass
-                    #     rgb_img = self.image_decoder.decode(
-                    #         getattr(frame, "rgb").image_data
-                    #     )
+                        # pass
+                        img = self.image_decoder.decode(
+                            getattr(frame, "rgb").image_data
+                        )
                     #     frame = rgb_img
                     #     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
