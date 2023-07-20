@@ -255,14 +255,12 @@ class CameraColorApp(App):
                 # Skip if view_name was not included in frame
                 try:
                     # Decode the image and render it in the correct kivy texture
-                    
+                    img = self.image_decoder.decode(
+                            getattr(frame, view_name).image_data
+                        )
                     
                     #----------rgb and purple filtering----------#
                     if view_name == 'rgb':
-                        img = self.image_decoder.decode(
-                            getattr(frame, view_name).image_data
-                        )
-
                         
                         frame = img
                         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -357,10 +355,6 @@ class CameraColorApp(App):
                     #     # combine the two images or just show the color version
                     #     # display the distance for purple ball using kivy things
                         
-                    else:
-                        img = self.image_decoder.decode(
-                            getattr(frame, view_name).image_data
-                        )
                         
                         
                         
