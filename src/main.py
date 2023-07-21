@@ -249,7 +249,8 @@ class CameraColorApp(App):
 
             # get the sync frame
             frame: oak_pb2.OakSyncFrame = response.frame
-
+            frame_x = 1920
+            frame_y = 1080
             # get image and show
             for view_name in ["data", "rgb", "disparity", "left", "right"]:
                 # Skip if view_name was not included in frame
@@ -258,6 +259,7 @@ class CameraColorApp(App):
                     
                     if view_name == "data":
                         imu_packet = getattr(frame, 'imu_packets').packets[0]
+                        
                         imu_x = imu_packet.gyro_packet.gyro.x
                         imu_y = imu_packet.gyro_packet.gyro.y
                         imu_z = imu_packet.gyro_packet.gyro.z
@@ -266,7 +268,7 @@ class CameraColorApp(App):
                         acc_y = imu_packet.accelero_packet.accelero.y
                         acc_z = imu_packet.accelero_packet.accelero.z
                         
-                        # img = np.zeros((350, 500, 3), dtype = np.uint8)
+                        img = np.zeros((1080, 1920, 3), dtype = np.uint8)
                         
                         cv2.putText(img, 'G X: %.4s' % str(imu_x),(350,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
                         cv2.putText(img, 'G Y: %.4s' % str(imu_y),(350,250),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
@@ -335,7 +337,6 @@ class CameraColorApp(App):
                             cv2.putText(img, text, (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
                         #-----#
                         '''
-                        cv2.putText(img, str(img.shape[1]) + str(img.shape[0]) ,(350,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
 
                         
                         # cv2.putText(img, 'Gyro packet size: %.6s' % str(imu_size),(300,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
