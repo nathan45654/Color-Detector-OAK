@@ -263,7 +263,7 @@ class CameraColorApp(App):
                             getattr(frame, view_name).image_data
                         )
                         ################################################
-                        imu_data = getattr(frame, 'device_info').name
+                        imu_data = getattr(frame, 'imu_packets').packets.gyro_packet.accuracy
                         
                         img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
@@ -313,7 +313,7 @@ class CameraColorApp(App):
                             cv2.putText(img, text, (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
                         #-----#
                         '''
-                        cv2.putText(img,int(imu_data),(50,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        cv2.putText(img,str(imu_data),(50,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
                         
                     elif view_name == "disparity":
                         
