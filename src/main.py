@@ -268,7 +268,7 @@ class CameraColorApp(App):
                         imu_y = imu_packet.gyro_packet.gyro.y
                         imu_z = imu_packet.gyro_packet.gyro.z
                         
-                        imu_size = imu_packet.packets.len()
+                        imu_size = getattr(frame, 'imu_packets').len()
                         
                         # acc_x = imu_packet.accelero_packet.accelero.x
                         # acc_y = imu_packet.accelero_packet.accelero.y
