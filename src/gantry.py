@@ -35,7 +35,6 @@ class GantryControlState:
     STATE_ALARM = 5
     STATE_ESTOPPED = 6
     
-
 def make_gantry_rpdo1_proto(
     state_req: GantryControlState, cmd_feed: int, cmd_y: int, cmd_x: int, jog: bool
     ) -> canbus_pb2.RawCanbusMessage:
@@ -66,7 +65,6 @@ def make_gantry_rpdo1_proto(
             jog=jog
             ).encode(),
     )
-    
     
 class GantryRpdo1(Packet):
     #State, feed, location, relative, and jog (request) sent to the Amiga vehicle control unit (VCU).
