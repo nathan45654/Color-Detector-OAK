@@ -251,18 +251,12 @@ class CameraColorApp(App):
             frame: oak_pb2.OakSyncFrame = response.frame
 
             # get image and show
-            for view_name in ["rgb", "disparity", "left", "right"]:
+            for view_name in ["data", "rgb", "disparity", "left", "right"]:
                 # Skip if view_name was not included in frame
                 try:
                     # Decode the image and render it in the correct kivy texture
                     
-                    
-                    #----------rgb and purple filtering----------#
-                    if view_name == 'rgb':
-                        img = self.image_decoder.decode(
-                            getattr(frame, view_name).image_data
-                        )
-                        ################################################
+                    if view_name == "data":
                         imu_packet = getattr(frame, 'imu_packets').packets[0]
                         imu_x = imu_packet.gyro_packet.gyro.x
                         imu_y = imu_packet.gyro_packet.gyro.y
@@ -272,6 +266,27 @@ class CameraColorApp(App):
                         acc_y = imu_packet.accelero_packet.accelero.y
                         acc_z = imu_packet.accelero_packet.accelero.z
                         
+                        # img = np.zeros((350, 500, 3), dtype = np.uint8)
+                        
+                        cv2.putText(img, 'G X: %.4s' % str(imu_x),(350,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        cv2.putText(img, 'G Y: %.4s' % str(imu_y),(350,250),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        cv2.putText(img, 'G Z: %.4s' % str(imu_z),(350,300),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        
+                        cv2.putText(img, 'A X: %.4s' % str(acc_x),(30,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        cv2.putText(img, 'A Y: %.4s' % str(acc_y),(30,250),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        cv2.putText(img, 'A Z: %.4s' % str(acc_z),(30,300),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        
+                        # cv2.putText(img, 'Gyro packet size: %.6s' % str(imu_size),(300,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+
+
+                        
+                    #----------rgb and purple filtering----------#
+                    if view_name == 'rgb':
+                        img = self.image_decoder.decode(
+                            getattr(frame, view_name).image_data
+                        )
+                        ################################################
+                                                
                         img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
                         purple_lower = np.array([120,70,50])
@@ -320,13 +335,8 @@ class CameraColorApp(App):
                             cv2.putText(img, text, (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
                         #-----#
                         '''
-                        cv2.putText(img, 'G X: %.3s' % str(imu_x),(350,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
-                        cv2.putText(img, 'G Y: %.3s' % str(imu_y),(350,250),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
-                        cv2.putText(img, 'G Z: %.3s' % str(imu_z),(350,300),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
-                        
-                        cv2.putText(img, 'A X: %.3s' % str(acc_x),(30,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
-                        cv2.putText(img, 'A Y: %.3s' % str(acc_y),(30,250),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
-                        cv2.putText(img, 'A Z: %.3s' % str(acc_z),(30,300),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        cv2.putText(img, rgb_size ,(350,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+
                         
                         # cv2.putText(img, 'Gyro packet size: %.6s' % str(imu_size),(300,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
 
