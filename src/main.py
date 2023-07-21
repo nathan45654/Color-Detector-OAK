@@ -313,7 +313,7 @@ class CameraColorApp(App):
                             cv2.putText(img, text, (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
                         #-----#
                         '''
-                        cv2.putText(img,imu_data,(50,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        cv2.putText(img,str(imu_data),(50,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
                         
                     elif view_name == "disparity":
                         
