@@ -262,7 +262,7 @@ class CameraColorApp(App):
                         img = self.image_decoder.decode(
                             getattr(frame, view_name).image_data
                         )
-                        imu_data = getattr(frame, 'imu_packets')
+                        imu_data = getattr(frame, 'device_info').name
                         
                         img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
