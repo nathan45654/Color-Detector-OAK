@@ -315,9 +315,9 @@ class CameraColorApp(App):
                             cv2.putText(img, text, (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
                         #-----#
                         '''
-                        cv2.putText(img,"X: " + str(imu_x),(50,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
-                        cv2.putText(img,"Y: " + str(imu_y),(150,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
-                        cv2.putText(img,"Z: " + str(imu_z),(250,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        cv2.putText(img, "X: " + '%.6s' % str(imu_x),(50,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        cv2.putText(img, "Y: " + '%.6s' % str(imu_y),(50,300),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        cv2.putText(img, "Z: " + '%.6s' % str(imu_z),(50,400),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
 
 
 
