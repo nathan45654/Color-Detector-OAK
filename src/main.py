@@ -258,25 +258,25 @@ class CameraColorApp(App):
                     # Decode the image and render it in the correct kivy texture
                     
                     if view_name == "data":
-                        imu_packet = getattr(frame, 'imu_packets').packets[0]
+                        # imu_packet = getattr(frame, 'imu_packets').packets[0]
                         
-                        imu_x = imu_packet.gyro_packet.gyro.x
-                        imu_y = imu_packet.gyro_packet.gyro.y
-                        imu_z = imu_packet.gyro_packet.gyro.z
+                        # imu_x = imu_packet.gyro_packet.gyro.x
+                        # imu_y = imu_packet.gyro_packet.gyro.y
+                        # imu_z = imu_packet.gyro_packet.gyro.z
                                                 
-                        acc_x = imu_packet.accelero_packet.accelero.x
-                        acc_y = imu_packet.accelero_packet.accelero.y
-                        acc_z = imu_packet.accelero_packet.accelero.z
+                        # acc_x = imu_packet.accelero_packet.accelero.x
+                        # acc_y = imu_packet.accelero_packet.accelero.y
+                        # acc_z = imu_packet.accelero_packet.accelero.z
                         
-                        img = np.zeros((1080, 1920, 3), dtype = np.uint8)
+                        img = np.zeros((1080, 1920, 3))
                         
-                        cv2.putText(img, 'G X: %.4s' % str(imu_x),(350,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
-                        cv2.putText(img, 'G Y: %.4s' % str(imu_y),(350,250),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
-                        cv2.putText(img, 'G Z: %.4s' % str(imu_z),(350,300),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        # cv2.putText(img, 'G X: %.4s' % str(imu_x),(350,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        # cv2.putText(img, 'G Y: %.4s' % str(imu_y),(350,250),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        # cv2.putText(img, 'G Z: %.4s' % str(imu_z),(350,300),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
                         
-                        cv2.putText(img, 'A X: %.4s' % str(acc_x),(30,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
-                        cv2.putText(img, 'A Y: %.4s' % str(acc_y),(30,250),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
-                        cv2.putText(img, 'A Z: %.4s' % str(acc_z),(30,300),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        # cv2.putText(img, 'A X: %.4s' % str(acc_x),(30,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        # cv2.putText(img, 'A Y: %.4s' % str(acc_y),(30,250),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        # cv2.putText(img, 'A Z: %.4s' % str(acc_z),(30,300),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
                         
                         # cv2.putText(img, 'Gyro packet size: %.6s' % str(imu_size),(300,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
 
