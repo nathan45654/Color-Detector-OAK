@@ -324,7 +324,7 @@ class CameraColorApp(App):
                             # text = "centroid: " + str(cX) + " " + str(cY)
                             # cv2.putText(img, text, (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                         # #######    
-                        '''
+                        
                         disparity_img = self.image_decoder.decode(
                             getattr(frame, "disparity").image_data
                         )
@@ -336,10 +336,10 @@ class CameraColorApp(App):
                             text = "Center: " + str(disparity_img[cX][cY])
                             cv2.putText(img, text, (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
                         #-----#
-                        '''
+                        
 
                         
-                        cv2.putText(img, str(rgb_size),(300,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        # cv2.putText(img, str(rgb_size),(300,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
 
                         
                         
