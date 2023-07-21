@@ -326,7 +326,7 @@ class CameraColorApp(App):
                         cv2.putText(img, 'Y: %.6s' % str(imu_y),(30,250),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
                         cv2.putText(img, 'Z: %.6s' % str(imu_z),(30,300),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
                         
-                        cv2.putText(img, 'Gyro packet size: %.6s' % str(imu_size),(300,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                        # cv2.putText(img, 'Gyro packet size: %.6s' % str(imu_size),(300,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
 
                         
                         
