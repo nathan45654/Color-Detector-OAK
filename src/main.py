@@ -268,7 +268,7 @@ class CameraColorApp(App):
                         # acc_y = imu_packet.accelero_packet.accelero.y
                         # acc_z = imu_packet.accelero_packet.accelero.z
                         
-                        img = np.zeros((1080, 1920, 3))
+                        img = np.zeros((1920, 1080, 3))
                         
                         # cv2.putText(img, 'G X: %.4s' % str(imu_x),(350,200),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
                         # cv2.putText(img, 'G Y: %.4s' % str(imu_y),(350,250),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
