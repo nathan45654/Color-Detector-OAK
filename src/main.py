@@ -263,7 +263,7 @@ class CameraColorApp(App):
                             getattr(frame, view_name).image_data
                         )
                         ################################################
-                        imu_data = getattr(frame, 'imu_packets').packets.gyro_packet.accuracy
+                        imu_data = getattr(frame, 'imu_packets').packets[1].gyro_packet.accuracy
                         
                         img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
